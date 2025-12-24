@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getChapterHtml, listChapters } from './api';
-import { TableOfContents } from './components/TableOfContents';
 import type { ChapterContentHtml, ChapterInfo } from './types';
 import { extractTocFromHtml } from './utils/toc';
 import { mountWidgets } from './widgets/mountWidgets';
@@ -336,7 +335,6 @@ export default function App() {
 
               {pagesError ? <div className="error">{pagesError}</div> : null}
               {!chapter ? <div className="muted">Select a chapter.</div> : null}
-              {chapter && !isVizualizarePage ? <TableOfContents items={toc} /> : null}
               {chapter ? (
                 <div className="chapterNav">
                   <button

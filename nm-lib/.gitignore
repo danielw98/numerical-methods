@@ -1,0 +1,17 @@
+# Build outputs
+/app.exe
+*.exe
+*.o
+*.obj
+*.pdb
+*.ilk
+
+# Tests binaries output
+bin/tests/
+
+# Large write-up content (kept locally, not in repo)
+capitole/
+
+# Local tooling / helpers
+tools/
+scripts/

@@ -1,0 +1,21 @@
+# Repo allowlist: ignore everything by default at repo root
+/*
+
+# Keep repo metadata
+!.gitignore
+!README.md
+
+# Repo build entrypoint
+!build.ps1
+
+# Keep the two exported PDFs
+!01_TCSI_Referat_01.pdf
+!01_TCSI_Referat_02.pdf
+
+# Keep the referate PDFs
+!referat1.pdf
+!referat2.pdf
+
+# Keep the actual codebases
+!nm-lib/
+!webapp/

@@ -19,3 +19,6 @@
 # Keep the actual codebases
 !nm-lib/
 !webapp/
+
+# Keep images/assets
+!images/

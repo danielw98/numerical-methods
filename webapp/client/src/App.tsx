@@ -56,21 +56,10 @@ function tryGetIdFromChapterHref(href: string): string | null {
 function scrollToHeadingId(id: string) {
   const el = document.getElementById(id);
   if (!el) return;
-
-  const scrollContainer = document.querySelector('.content');
-  const marginTop = 12;
-
-  if (scrollContainer instanceof HTMLElement)
-  {
-    const containerRect = scrollContainer.getBoundingClientRect();
-    const elRect = el.getBoundingClientRect();
-    const targetTop = elRect.top - containerRect.top + scrollContainer.scrollTop - marginTop;
-    scrollContainer.scrollTo({ top: targetTop, behavior: 'smooth' });
-  }
-  else
-  {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  const marginTop = 80;
+  const rect = el.getBoundingClientRect();
+  const absoluteTop = window.scrollY + rect.top - marginTop;
+  window.scrollTo({ top: absoluteTop, behavior: 'smooth' });
 }
 
 export default function App() {
@@ -79,6 +68,7 @@ export default function App() {
   const [chapter, setChapter] = useState<ChapterContentHtml | null>(null);
   const [pagesError, setPagesError] = useState<string>('');
   const [pagesLoading, setPagesLoading] = useState<boolean>(false);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
   useEffect(() => {
     let mounted = true;
@@ -172,6 +162,14 @@ export default function App() {
     return () => window.clearTimeout(t);
   }, [chapter]);
 
+  const { prevChapter, nextChapter } = useMemo(() => {
+    const index = chapters.findIndex((p) => p.id === selectedId);
+    return {
+      prevChapter: index > 0 ? chapters[index - 1] : null,
+      nextChapter: index >= 0 && index < chapters.length - 1 ? chapters[index + 1] : null,
+    };
+  }, [chapters, selectedId]);
+
   const sidebar = useMemo(() => {
     if (pagesLoading) return <div className="muted">Loading…</div>;
     if (chapters.length === 0) return <div className="muted">No chapters found.</div>;
@@ -236,6 +234,7 @@ export default function App() {
                     onClick={() => {
                       setSelectedIdInLocation(p.id, 'push');
                       setSelectedId(p.id);
+                      setSidebarOpen(false);
                     }}
                     title={p.title}
                   >
@@ -303,11 +302,26 @@ export default function App() {
   return (
     <div className="appShell">
       <header className="navbar">
-        <div className="navbarBrand">Metode numerice</div>
+        <div className="navbarLeft">
+          <button
+            type="button"
+            className="navToggle"
+            aria-label="Deschide meniul de capitole"
+            onClick={() => setSidebarOpen((open) => !open)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+          <div className="navbarBrand">Metode numerice</div>
+        </div>
+        <div className="navbarChapterTitle" title={selectedTitle}>
+          {selectedTitle}
+        </div>
       </header>
 
-      <div className="layout">
-        <aside className="sidebar">
+      <div className={sidebarOpen ? 'layout layoutSidebarOpen' : 'layout'}>
+        <aside className={sidebarOpen ? 'sidebar sidebarOpen' : 'sidebar'}>
           <div className="sidebarHeader">Chapters</div>
           {sidebar}
         </aside>
@@ -324,6 +338,36 @@ export default function App() {
               {!chapter ? <div className="muted">Select a chapter.</div> : null}
               {chapter && !isVizualizarePage ? <TableOfContents items={toc} /> : null}
               {chapter ? (
+                <div className="chapterNav">
+                  <button
+                    type="button"
+                    className="chapterNavBtn"
+                    disabled={!prevChapter}
+                    onClick={() => {
+                      if (!prevChapter) return;
+                      setSelectedIdInLocation(prevChapter.id, 'push');
+                      setSelectedId(prevChapter.id);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  >
+                    ← Capitol anterior
+                  </button>
+                  <button
+                    type="button"
+                    className="chapterNavBtn"
+                    disabled={!nextChapter}
+                    onClick={() => {
+                      if (!nextChapter) return;
+                      setSelectedIdInLocation(nextChapter.id, 'push');
+                      setSelectedId(nextChapter.id);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  >
+                    Capitol următor →
+                  </button>
+                </div>
+              ) : null}
+              {chapter ? (
                 <div
                   className={isVizualizarePage ? 'markdown markdownWide' : 'markdown'}
                   dangerouslySetInnerHTML={{ __html: chapter.html }}
@@ -333,6 +377,10 @@ export default function App() {
           </div>
         </main>
       </div>
+      <div
+        className={sidebarOpen ? 'sidebarBackdrop sidebarBackdropVisible' : 'sidebarBackdrop'}
+        onClick={() => setSidebarOpen(false)}
+      />
     </div>
   );
 }

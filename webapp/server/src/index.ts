@@ -167,6 +167,17 @@ app.get('/api/rootfinding/trace', async (req, res) => {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '../../../');
+
+// Static assets for chapter images (used inside rendered markdown HTML).
+// Supports both relative "images/..." (resolved as "/chapters/images/...")
+// and absolute "/images/..." URLs.
+const imagesDir = path.resolve(repoRoot, 'images');
+if (fs.existsSync(imagesDir))
+{
+  app.use('/images', express.static(imagesDir));
+  app.use('/chapters/images', express.static(imagesDir));
+}
+
 const clientDist = path.resolve(repoRoot, 'webapp/client/dist');
 const clientIndex = path.join(clientDist, 'index.html');
 

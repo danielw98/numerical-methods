@@ -6,7 +6,9 @@ export default defineConfig({
   server: {
     host: true,
     proxy: {
-      '/api': 'http://localhost:5180'
+      '/api': 'http://localhost:5180',
+      '/images': 'http://localhost:5180',
+      '/chapters/images': 'http://localhost:5180'
     }
   }
 });

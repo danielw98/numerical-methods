@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { getChapterHtmlBySlug, getMarkdownPageHtml, listChapters, listMarkdownPages } from './content';
+import { getChapterHtmlBySlug, getMarkdownPageHtml, listChapters, listMarkdownPages } from './content.js';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';

@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { renderMarkdownToHtml } from './render/markdown';
+import { renderMarkdownToHtml } from './render/markdown.js';
 
 export type PageInfo = {
   id: string;

@@ -69,3 +69,48 @@ From repo root:
 - `cd webapp`
 - `npm install`
 - `npm run dev`
+
+## Run everything with Docker
+
+The repo includes a Dockerfile + docker-compose setup that builds:
+- the C++ trace binary used by the API
+- the Node/Express server
+- the React/Vite client
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/DanielW98/numerical-methods.git
+cd numerical-methods
+```
+
+### 2. Build and start with Docker Compose
+
+Using Docker Compose v2 (recommended):
+
+```bash
+docker compose up -d --build
+```
+
+Or with legacy docker-compose:
+
+```bash
+docker-compose up -d --build
+```
+
+This will:
+- build the C++ test binary `nm-lib/bin/tests/tema1_rootfinding`
+- build the webapp server/client
+- start the container defined in `docker-compose.yml` (port 5180 by default)
+
+Then open the browser at:
+
+- `http://localhost:5180`
+
+To stop everything:
+
+```bash
+docker compose down
+```
+
+If you deploy on a remote VPS, run the same `docker compose up -d --build` there.

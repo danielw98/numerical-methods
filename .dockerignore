@@ -1,0 +1,20 @@
+# Keep Docker context small
+.git/
+**/.DS_Store
+**/node_modules/
+**/dist/
+**/build/
+**/*.log
+
+# Local binaries / outputs
+nm-lib/bin/
+nm-lib/app.exe
+
+# Python envs
+.venv/
+
+# Editor
+.vscode/
+
+# Large docs you don't need to ship for running the webapp
+cursuri/

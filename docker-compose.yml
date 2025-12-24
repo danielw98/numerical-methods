@@ -1,0 +1,24 @@
+services:
+  metode-numerice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: metode-numerice
+    restart: unless-stopped
+    environment:
+      - PORT=5180
+    networks:
+      - nw
+    # Optional local-only port mapping (for debugging without Caddy)
+    # ports:
+    #   - "127.0.0.1:5180:5180"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:5180/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))" ]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+networks:
+  nw:
+    name: nw
+    external: true

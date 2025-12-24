@@ -22,3 +22,8 @@
 
 # Keep images/assets
 !images/
+
+# Docker deployment files
+!Dockerfile
+!docker-compose.yml
+!.dockerignore
